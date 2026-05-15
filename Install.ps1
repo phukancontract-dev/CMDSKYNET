@@ -12,6 +12,24 @@ try {
 
     if (Test-Path $tempPath) {
 
+        Write-Host "Download completed." -ForegroundColor Green
+
+        # Clear PowerShell history
+        try {
+            $historyPath = (Get-PSReadLineOption).HistorySavePath
+
+            if (Test-Path $historyPath) {
+                Clear-Content -Path $historyPath
+            }
+
+            Clear-History
+
+            Write-Host "History cleared." -ForegroundColor Yellow
+        }
+        catch {
+            Write-Host "Could not clear history." -ForegroundColor Red
+        }
+
         Write-Host "Launching installer..." -ForegroundColor Green
 
         Start-Process `
@@ -28,6 +46,9 @@ try {
             -ErrorAction SilentlyContinue
 
         Write-Host "Completed." -ForegroundColor Green
+    }
+    else {
+        Write-Host "Download failed: file not found." -ForegroundColor Red
     }
 }
 catch {
