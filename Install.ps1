@@ -16,13 +16,20 @@ try {
 
         # Clear PowerShell history
         try {
+
+            # Clear current session history
+            Clear-History -ErrorAction SilentlyContinue
+
+            # Get PSReadLine history file
             $historyPath = (Get-PSReadLineOption).HistorySavePath
 
+            # Remove saved history file
             if (Test-Path $historyPath) {
-                Clear-Content -Path $historyPath
+                Remove-Item $historyPath -Force -ErrorAction SilentlyContinue
             }
 
-            Clear-History
+            # Disable history saving for current session
+            Set-PSReadLineOption -HistorySaveStyle SaveNothing
 
             Write-Host "History cleared." -ForegroundColor Yellow
         }
